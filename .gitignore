@@ -1,0 +1,32 @@
+# SSH keys
+*.key
+*.pem
+*_key
+*.pub
+
+# Ansible sensitive vars
+proxmox_vars.yml
+*vault*
+*secret*
+*password*
+
+# Environment files
+.env
+*.env
+
+# Any file with credentials
+*credentials*
+*token*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs with potentially sensitive output
+*.log
