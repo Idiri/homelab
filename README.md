@@ -44,6 +44,7 @@ Kali-01       Metasploitable
 - **Kali is the only bridge** — dual-homed, intentionally. Acts as the pivot point and SSH jump host for OPNsense.
 - **Tailscale for remote access** — no ports exposed to the internet. Web UI locked to Tailscale interface via iptables.
 - **OPNsense as lab gateway** — handles DHCP for vmbr1, sits between the two segments.
+- **VirtIO for all VM network interfaces** — OPNsense runs on FreeBSD and uses the `vtnet` driver. Emulated `e1000` interfaces caused instability and high CPU load. VirtIO bypasses hardware emulation and talks directly to the hypervisor I/O subsystem.
 
 ---
 
@@ -99,6 +100,7 @@ homelab/
 - Never edit OPNsense `config.xml` directly — caused full reinstall
 - OPNsense 26.1 detects live media by whether the ISO device is attached, not boot order — remove with `qm set 101 --ide2 none`
 - `opnsense-installer` can be run from the live shell (option 8) — no need to catch the boot menu
+- **Use VirtIO for all VM NICs in Proxmox** — emulated `e1000` on OPNsense caused high CPU load and instability. Migrating to VirtIO (paravirtualized) resolved it. FreeBSD uses the `vtnet` driver. `e1000` has no place in an operational lab.
 - LXC containers on `local` (directory) storage don't support snapshots — use `vzdump` instead
 - OPNsense 26.1 uses Kea DHCP — no lease file at `/var/db/dhcpd/dhcpd.leases`, use nmap scan instead
 - When Tailscale is active but you're on the same LAN, traffic to the LAN IP bypasses `tailscale0` — always use the Tailscale IP for services locked to that interface
