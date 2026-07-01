@@ -1,0 +1,16 @@
+---
+- name: Konfigurer web-01
+  hosts: webservers
+  connection: local
+  vars:
+    container_id: 201
+    proxmox_host: "root@192.168.1.50"
+  tasks:
+    - name: Oppdater apt cache i container
+      command: "ssh {{ proxmox_host }} pct exec {{ container_id }} -- apt update"
+
+    - name: Installer Nginx
+      command: "ssh {{ proxmox_host }} pct exec {{ container_id }} -- apt install -y nginx"
+
+    - name: Sikre at Nginx kjører
+      command: "ssh {{ proxmox_host }} pct exec {{ container_id }} -- systemctl start nginx"

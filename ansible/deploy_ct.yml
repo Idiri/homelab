@@ -1,0 +1,27 @@
+---
+- name: Opprett ny container
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - ../proxmox_vars.yml
+  tasks:
+    - name: Opprett container web-01
+      community.general.proxmox:
+        api_host: "{{ proxmox_host }}"
+        api_user: "{{ proxmox_user }}"
+        api_token_id: "{{ proxmox_token_id }}"
+        api_token_secret: "{{ proxmox_token_secret }}"
+        node: "proxy"
+        vmid: 201
+        hostname: "web-01"
+        ostemplate: "local:vztmpl/debian-12-standard_12.12-1_amd64.tar.zst"
+        memory: 512
+        cores: 1
+        unprivileged: yes
+        netif: '{"net0":"name=eth0,bridge=vmbr0,ip=10.0.0.11/24,gw=10.0.0.1"}'
+        disk: 4
+        storage: "local"
+        state: present
+        validate_certs: no
+        timeout: 300
